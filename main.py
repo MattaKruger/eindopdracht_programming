@@ -15,7 +15,16 @@ sp = spotipy.Spotify(
 )
 
 
+running = True
+
+
 def convert_ms_to_minutes(ms: int):
+    """
+    Function that converts ms to minutes and seconds
+    :param ms: milliseconds
+    :return: formatted string
+    """
+
     minutes = int((ms / (1000 * 60)) % 60)
     seconds = int((ms / 1000) % 60)
     return "minutes: {} and {} seconds".format(minutes, seconds)
@@ -48,20 +57,6 @@ def get_song_info(songs: typing.List, index: int):
     )
 
 
-def get_artist(name: str):
-    """
-    API call that finds artists or
-    :param name:
-    :return: artist name
-    """
-    results = sp.search(q="artist:" + name, type="artist")
-    items = results["artists"]["items"]
-    if len(items) > 0:
-        return items[0]
-    else:
-        print("Artist not found, try again please")
-
-
 def show_recommendations_for_artist(artist: typing.Dict):
     """
     API call that gets recommendations based on the artist
@@ -69,8 +64,8 @@ def show_recommendations_for_artist(artist: typing.Dict):
     :return: A list of recommendations
     """
     songs = []
-    results = sp.recommendations(seed_artists=[artist["id"]], limit=50)
-    for i, entry in enumerate(results["tracks"]):
+    artist_recommendations = sp.recommendations(seed_artists=[artist["id"]], limit=50)
+    for i, entry in enumerate(artist_recommendations["tracks"]):
         print(
             "Recommendation: {}: {} - {}".format(
                 i, entry["name"], entry["artists"][0]["name"]
@@ -87,9 +82,16 @@ def show_recommendations_for_artist(artist: typing.Dict):
     return songs
 
 
-selected_artist = get_artist(artist_input())
-
-recommendations = show_recommendations_for_artist(selected_artist)
-
-if __name__ == "__main__":
-    get_song_info(recommendations, recommendation_input())
+# Main loop
+while running:
+    name = artist_input()
+    results = sp.search(q="artist:" + name, type="artist")
+    items = results["artists"]["items"]
+    if len(items) > 0:
+        selected_artist = items[0]
+        recommendations = show_recommendations_for_artist(selected_artist)
+        selected_song = recommendation_input()
+        get_song_info(recommendations, selected_song)
+        break
+    else:
+        print("Artist not found, try again")
