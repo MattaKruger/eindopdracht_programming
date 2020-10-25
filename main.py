@@ -1,12 +1,7 @@
 import typing
-import logging
 
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-
-# Setup basic logging
-logger = logging.getLogger("examples.artist_recommendations")
-logging.basicConfig(level="INFO")
 
 
 #  Create a spotify instance with user_id
@@ -64,7 +59,7 @@ def get_artist(name: str):
     if len(items) > 0:
         return items[0]
     else:
-        print("Artist not found")
+        print("Artist not found, try again please")
 
 
 def show_recommendations_for_artist(artist: typing.Dict):
