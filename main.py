@@ -7,8 +7,8 @@ from spotipy.oauth2 import SpotifyOAuth
 #  Create a spotify instance with user_id
 sp = spotipy.Spotify(
     auth_manager=SpotifyOAuth(
-        client_id="8f67eeced8ae42e18ee86373d102a283",
-        client_secret="7405c0937da6421dad1a40860ecbf9ee",
+        client_id="placeholder",
+        client_secret="placeholder",
         redirect_uri="http://example.com/callback/",
         scope="user-library-read",
     )
